@@ -29,11 +29,13 @@
             <caption><h2>Tabla de ganadores</h2></caption>
 
             <tr>
+                <th>TIMES</th>
                 <th>NAME</th>
                 <th>AGE</th>
              </tr>
           <template is="dom-repeat" items="[[winners]]" as="winner" sort="__orderByAge">
              <tr class$="[[winner.classColor]]">
+                <th>[[winner.times]]</th>
                 <th>[[winner.name]]</th>
                 <th>[[winner.age]]</th>
              </tr>
@@ -73,6 +75,7 @@
         this.addEventListener('new-winner-notification', (event)=>{
           this.push('winners', event.detail);
           this._setColor();
+          this._setTimesWinner();
         });
       }
 
@@ -81,6 +84,20 @@
          if(a.age > b.age){
            return 1;
          }
+      }
+
+      _setTimesWinner(){
+
+       const arrayWinners =  this.winners.map((winner)=>  this.winners.filter(winerFilter => winner === winerFilter));
+       arrayWinners.map(winnerReply => {
+
+          for(let winner of this.winners){
+              if(winner.name === winnerReply[0].name){
+                winner.times = winnerReply.length
+              }
+          }
+       });
+         
       }
 
       _setColor(){
