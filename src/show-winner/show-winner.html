@@ -1,0 +1,57 @@
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../shared-styes.html">
+
+<dom-module id="show-winner">
+    <template>
+      <style include="shared-styles">
+        :host {
+          display: block;
+        }
+      </style>
+
+      <article class="card-gray">
+        <h2>El ganador es:</h2>
+        <h1>[[winner.name]]</h1>
+        <paper-button on-tap="__selectWinner">Volver a jugar</paper-button>
+      </article>
+
+    </template>
+  
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class ShowWinner extends Polymer.Element {
+        static get is() { return 'show-winner'; }
+        static get properties() {
+          return {
+            players: {
+              type: Array,
+              value: []
+            },
+            winner:{
+                type:Object,
+                value:{}
+            }
+          };
+        }
+
+        __selectWinner(){
+            const randomOption = Math.floor(Math.random()*this.players.length);
+
+            this.winner = this.players[randomOption];
+
+            this.dispatchEvent(new CustomEvent('new-winner-notification', {
+                bubbles:true,
+                composed:true,
+                detail:this.winner
+            }));
+        }
+      }
+  
+      window.customElements.define(ShowWinner.is, ShowWinner);
+    </script>
+  </dom-module>
+  

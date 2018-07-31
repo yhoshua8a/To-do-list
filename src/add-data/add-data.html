@@ -1,0 +1,69 @@
+
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../shared-styes.html">
+
+<dom-module id="add-data">
+    <template>
+      <style include="shared-styles">
+        :host {
+          display: block;
+        }
+      </style>
+      
+      <article class="card-gray">
+
+            <table>
+                <caption><h2>Agregar concursante</h2></caption>
+                <tr>
+                  <th>         
+                      <input type="text" id="name" placeholder="Nombre completo">
+                      <input type="number" id="age" placeholder="Edad">
+                      <paper-button on-tap="__addPlayer">Enviar</paper-button>
+                    </th>
+                </tr>
+            </table>
+ 
+      </article>
+    </template>
+  
+    <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class AddData extends Polymer.Element {
+        static get is() { return 'add-data'; }
+        static get properties() {
+          return {
+            prop1: {
+              type: String,
+              value: 'list-winners'
+            }
+          };
+        }
+
+        __addPlayer(){
+
+            const name = this.$.name.value || '';
+            const age = this.$.age.value || '';
+
+           if(name != '' && age != ''){
+             this.dispatchEvent(new CustomEvent('new-player-notification',{
+               bubbles:true,
+               composed:true,
+               detail:{name:name, age:age}
+             }));
+
+             this.$.name.value = '';
+             this.$.age.value = '';
+           }else{
+               alert('Debes llenar los datos');
+           }
+
+        }
+      }
+  
+      window.customElements.define(AddData.is, AddData);
+    </script>
+  </dom-module>
+  

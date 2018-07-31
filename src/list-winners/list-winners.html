@@ -1,0 +1,120 @@
+<link rel="import" href="../add-data/add-data.html">
+<link rel="import" href="../show-winner/show-winner.html">
+<link rel="import" href="../shared-styes.html">
+
+<dom-module id="list-winners">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        background: lightgrey;
+        padding: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .table-winners{
+        border: 1px solid gray;
+        padding: 5px;
+        width: 350px;
+      }
+
+    </style>
+
+    <add-data></add-data>
+    <show-winner players="[[players]]"></show-winner>
+
+    <article class="card-gray">
+        <h2>Hello List winners!</h2>
+      <table class="table-winners">
+            <caption><h2>Tabla de ganadores</h2></caption>
+
+            <tr>
+                <th>NAME</th>
+                <th>AGE</th>
+             </tr>
+          <template is="dom-repeat" items="[[winners]]" as="winner" sort="__orderByAge">
+             <tr class$="[[winner.classColor]]">
+                <th>[[winner.name]]</th>
+                <th>[[winner.age]]</th>
+             </tr>
+          </template>
+        </table>   
+    </article>
+
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ListWinners extends Polymer.Element {
+      static get is() { return 'list-winners'; }
+      static get properties() {
+        return {
+          players: {
+            type: Array,
+            value: []
+          },
+          winners:{
+            type:Array,
+            value:[]
+          }
+        };
+      }
+
+      connectedCallback(){
+        super.connectedCallback();
+
+        this.addEventListener('new-player-notification', (event)=>{
+          this.push('players', event.detail);
+        });
+
+        this.addEventListener('new-winner-notification', (event)=>{
+          this.push('winners', event.detail);
+          this._setColor();
+        });
+      }
+
+      __orderByAge(a,b){
+         
+         if(a.age > b.age){
+           return 1;
+         }
+      }
+
+      _setColor(){
+        
+        for(let winner of this.winners){
+          
+          winner.classColor = this._getColorOfAge(winner.age);
+        }
+        
+      }
+
+      _getColorOfAge(age=0){
+        let classColor = "";
+        
+        if(age<15){
+          classColor = "colorBlue";
+        }
+        else if(age > 14 && age < 31){
+          classColor = "colorGray";
+        }
+        else if(age > 30 && age < 46){
+          classColor = "colorBlue";
+        }
+        else if(age > 45 && age < 61){
+          classColor = "colorRed";
+        }
+        else{
+          classColor = "colorPink";
+        }
+        
+        return classColor;
+      }
+    }
+
+    window.customElements.define(ListWinners.is, ListWinners);
+  </script>
+</dom-module>
