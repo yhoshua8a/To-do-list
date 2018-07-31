@@ -39,6 +39,7 @@
         }
 
         __selectWinner(){
+          if(this.players.length>0){
             const randomOption = Math.floor(Math.random()*this.players.length);
 
             this.winner = this.players[randomOption];
@@ -48,6 +49,8 @@
                 composed:true,
                 detail:this.winner
             }));
+          }
+
         }
       }
   
